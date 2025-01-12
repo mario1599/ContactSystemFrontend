@@ -60,7 +60,7 @@
     const url = `http://localhost:8080/api/v1/contact/add-contact`;
     await axios.post(url, params);
 
-    //lisada check telefoninumbri jaoks ja character limit ka 
+    //TODO: lisada check telefoninumbri jaoks ja character limit ka 
     formData.value.nimi = "";
     formData.value.koodnimi = "";
     formData.value.telefoniNumber = "";
