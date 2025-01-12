@@ -40,9 +40,9 @@
   
   const isDivVisible = ref(false);
   const formData = ref({
-    nimi: '',
-    koodnimi: '',
-    telefoniNumber: ''
+    nimi: "",
+    koodnimi: "",
+    telefoniNumber: ""
   });
   
   const toggleDiv = () => {
@@ -51,13 +51,19 @@
   
   const submitForm = async () => {
     try {
-    const url = `http://localhost:8080/api/v1/contact/add-contact?nimi=${formData.value.nimi}&koodNimi=${formData.value.koodnimi}&telefon=${formData.value.telefoniNumber}`;
-    await axios.post(url);
+      
+    const params = new URLSearchParams();
+    params.append('nimi', formData.value.nimi);
+    params.append('koodNimi', formData.value.koodnimi);
+    params.append('telefon', formData.value.telefoniNumber);
+      
+    const url = `http://localhost:8080/api/v1/contact/add-contact`;
+    await axios.post(url, params);
 
     //lisada check telefoninumbri jaoks ja character limit ka 
-    formData.value.nimi = '';
-    formData.value.koodnimi = '';
-    formData.value.telefoniNumber = '';
+    formData.value.nimi = "";
+    formData.value.koodnimi = "";
+    formData.value.telefoniNumber = "";
     window.location.reload();
 } catch (error) {
     console.error('Error adding contact:', error);
