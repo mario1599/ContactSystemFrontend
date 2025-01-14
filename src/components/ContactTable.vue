@@ -2,7 +2,7 @@
   <table class="table table-bordered mt-4">
     <thead>
       <tr>
-        <th class="d-flex justify-content-between align-items-center">
+        <th class=" justify-content-between align-items-center">
           Nimi
           <i class="bi bi-arrow-down-up" style="cursor: pointer;" @click="sort('nimi')"></i>
         </th>
@@ -10,7 +10,9 @@
           Kood-nimi
           <i class="bi bi-arrow-down-up" style="cursor: pointer;" @click="sort('koodNimi')"></i>
         </th>
-        <th>Telefoni number</th>
+        <th>Telefoni number
+          <i class="bi bi-arrow-down-up" style="cursor: pointer;" @click="sort('telefon')"></i>
+        </th>
       </tr>
     </thead>
     <tbody>
@@ -20,21 +22,21 @@
         <td>{{ contactItem.telefon }}</td>
       </tr>
       <tr v-if="contact.length === 0">
-        <td colspan="3">No contacts available</td>
+        <td colspan="3">Kontaktid puuduvad</td>
       </tr>
     </tbody>
   </table>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { computed, onMounted, ref } from "vue";
 import axios from "axios";
-import { useSearchStore } from "@/store/search.ts";
+import { useSearchStore } from "@/store/search";
 
 const searchStore = useSearchStore();
 
 const contact = ref([]);
-const sortOrder = ref({ nimi: 'asc', koodNimi: 'asc' }); // Track sort order for each column
+const sortOrder = ref({ nimi: 'asc', koodNimi: 'asc', telefon: 'asc'});
 
 onMounted(async () => {
   try {
@@ -45,22 +47,24 @@ onMounted(async () => {
   }
 });
 
-// see sort mulle ei meeldi, mõtle ümber
-function sort(column: 'nimi' | 'koodNimi') {
-  contact.value.sort((a, b) => {
-    return sortOrder.value[column] === 'asc'
-      ? a[column].localeCompare(b[column])
-      : b[column].localeCompare(a[column]);
-  });
-  sortOrder.value[column] = sortOrder.value[column] === 'asc' ? 'desc' : 'asc';
-}
 
+function sort(column) {
+  const isAscending = sortOrder.value[column] === 'asc';
+  
+  sortOrder.value[column] = isAscending ? 'desc' : 'asc';
+
+  contact.value.sort((a, b) => {
+    const compareResult = a[column].localeCompare(b[column]);
+    return isAscending ? compareResult : -compareResult;
+  });
+}
 
 const filteredContacts = computed(() => {
   return contact.value.filter(contactItem => {
     return (
       contactItem.nimi.toLowerCase().includes(searchStore.query.toLowerCase()) ||
-      contactItem.koodNimi.toLowerCase().includes(searchStore.query.toLowerCase())
+      contactItem.koodNimi.toLowerCase().includes(searchStore.query.toLowerCase()) ||
+      contactItem.telefon.toLowerCase().includes(searchStore.query.toLowerCase())
     );
   });
 });

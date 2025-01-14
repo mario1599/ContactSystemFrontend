@@ -3,26 +3,22 @@
       <button @click="toggleDiv" class="btn btn-primary">
         <i class="bi bi-person-plus-fill"></i> Lisa kontakt
       </button>
-  
-      <!-- Hidden form container -->
       <div v-if="isDivVisible" class="overlay">
         <div class="form-box p-4">
           <h3 class="text-center mb-3">Lisa kontakt</h3>
-          <!-- Form with three input fields -->
           <form @submit.prevent="submitForm">
             <div class="mb-3">
               <label for="nimi" >Nimi:</label>
-              <input v-model="formData.nimi" type="text" id="nimi" class="form-control" required />
+              <input v-model="formData.nimi" type="text" id="nimi" class="form-control" required maxlength="20" />
             </div>
-  
             <div class="mb-3">
               <label for="koodnimi">Kood-nimi:</label>
-              <input v-model="formData.koodnimi" type="text" id="koodnimi" class="form-control" required />
+              <input v-model="formData.koodnimi" type="text" id="koodnimi" class="form-control" required maxlength="20" />
             </div>
-  
             <div class="mb-3">
               <label for="tel" class="form-label">Telefoni number</label>
-              <input v-model="formData.telefoniNumber" type="tel" id="tel" class="form-control" required />
+              <input v-model="formData.telefoniNumber" type="text" id="tel" class="form-control" required maxlength="10" 
+              @input="formData.telefoniNumber = formData.telefoniNumber.replace(/[^0-9]/g, '')"/>
             </div>
             <div class="d-flex justify-content-between">
               <button type="submit" class="btn btn-success">Lisa</button>
@@ -34,7 +30,7 @@
     </div>
   </template>
   
-  <script lang="ts" setup>
+  <script setup>
   import { ref } from 'vue';
   import axios from "axios";
   
@@ -60,7 +56,7 @@
     const url = `http://localhost:8080/api/v1/contact/add-contact`;
     await axios.post(url, params);
 
-    //TODO: lisada check telefoninumbri jaoks ja character limit ka 
+  
     formData.value.nimi = "";
     formData.value.koodnimi = "";
     formData.value.telefoniNumber = "";
@@ -94,5 +90,7 @@
     max-width: 400px;
     width: 100%;
   }
+
+
   </style>
   

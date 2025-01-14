@@ -8,14 +8,12 @@
     </div>
   </template>
   
-  <script lang="ts" setup>
-
-  import { useSearchStore } from "@/store/search.ts";
+  <script setup>
+  import { useSearchStore } from "@/store/search.js";
   const searchStore = useSearchStore();
-
-
   </script>
   
+
   <style scoped>
   .search-bar {
     width: 100%;
