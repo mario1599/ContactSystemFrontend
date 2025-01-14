@@ -63,7 +63,7 @@
     window.location.reload();
 } catch (error) {
     console.error('Error adding contact:', error);
-    alert('There was an error adding the contact.');
+    alert(error.message);
   }
 
   };
