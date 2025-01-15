@@ -12,6 +12,8 @@
         </th>
         <th>Telefoni number
           <i class="bi bi-arrow-down-up" style="cursor: pointer;" @click="sort('telefon')"></i>
+        </th style="max-width:10px">
+        <th>
         </th>
       </tr>
     </thead>
@@ -20,6 +22,7 @@
         <td>{{ contactItem.nimi }}</td>
         <td>{{ contactItem.koodNimi }}</td>
         <td>{{ contactItem.telefon }}</td>
+        <td><i class="bi bi-trash" style="cursor: pointer;" @click="removeContact(contactItem.id)"></i></td>
       </tr>
       <tr v-if="contact.length === 0">
         <td colspan="3">Kontaktid puuduvad</td>
@@ -68,5 +71,17 @@ const filteredContacts = computed(() => {
     );
   });
 });
+
+function removeContact(id) {
+  axios.delete(`http://localhost:8080/api/v1/contact/delete-contact?id=${id}`)
+  .then(response => {
+    console.log(response.data)
+    console.log(`Deleted post with ID ${id}`);
+    window.location.reload()
+  })
+  .catch(error => {
+    console.error(error);
+  });
+}
 
 </script>
